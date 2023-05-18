@@ -1,41 +1,39 @@
-import "./App.css";
-import logo from "./logo.png";
+import { Route, Routes } from "react-router-dom";
 
+import "./App.css";
+import Header from "./Components/Header";
+import Section from "./Components/Section";
+import DineOut from "./Components/DineOut";
+import NightLife from "./Components/NightLife";
+import Delivery from "./Components/Delivery";
+import { useContext } from "react";
+import { DeliveryContext } from "./Context/DeliveryContext";
+
+import Mockman from "mockman-js";
+import Dishes from "./Components/Dishes";
+/**
+ * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad
+ *
+ * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad&dishv2_id=30308
+ *
+ * https://www.zomato.com/webroutes/getPage?page_url=pageUrl(from )
+ *
+ * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/mehfil-narayanguda/order&location=&isMobile=0 - Top brands
+ */
 function App() {
+  const { sectionSearchTabs, isLoading, error } = useContext(DeliveryContext);
+  console.log("App");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} alt="mockBee logo" width="180" height="180" />
-        <h1 className="brand-title">
-          Welcome to <span>mockBee!</span>
-        </h1>
-        <p className="brand-description">
-          Get started by editing <code>src/App.js</code>
-        </p>
-        <div className="links">
-          <a
-            href="https://mockbee.netlify.app/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Explore mockBee
-          </a>
-          <a
-            href="https://mockbee.netlify.app/docs/api/introduction"
-            target="_blank"
-            rel="noreferrer"
-          >
-            API Documentation
-          </a>
-          <a
-            href="https://github.com/neogcamp/mockBee"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Contribute
-          </a>
-        </div>
-      </header>
+      <Header />
+      <Section />
+      <Routes>
+        <Route path="/" element={<Delivery />} />
+        <Route path="/dineout" element={<DineOut />} />
+        <Route path="/nightlife" element={<NightLife />} />
+        <Route path="/test" element={<Mockman />} />
+        <Route path="/dineout/:dishId" element={<Dishes />} />
+      </Routes>
     </div>
   );
 }
