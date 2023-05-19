@@ -19,7 +19,7 @@ const Section = () => {
     result = sectionSearchTabs.map((item) => {
       const { key, image, title } = item;
       return (
-        <NavLink to={key === "delivery" ? "/" : `/${key}`} key={key}>
+        <NavLink to={`/${key}`} key={key}>
           {({ isActive }) => (
             <div className="flex justify-center items-center flex-col ">
               <div className="flex items-center">

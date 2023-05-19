@@ -21,18 +21,17 @@ import Dishes from "./Components/Dishes";
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/mehfil-narayanguda/order&location=&isMobile=0 - Top brands
  */
 function App() {
-  const { sectionSearchTabs, isLoading, error } = useContext(DeliveryContext);
-  console.log("App");
+  const history = console.log("App");
   return (
     <div className="App">
       <Header />
       <Section />
       <Routes>
-        <Route path="/" element={<Delivery />} />
+        <Route path="/delivery" element={<Delivery />} />
         <Route path="/dineout" element={<DineOut />} />
         <Route path="/nightlife" element={<NightLife />} />
         <Route path="/test" element={<Mockman />} />
-        <Route path="/dineout/:dishId" element={<Dishes />} />
+        <Route path="/:dishId" element={<Dishes />} />
       </Routes>
     </div>
   );

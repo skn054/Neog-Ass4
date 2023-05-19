@@ -28,7 +28,7 @@ const DeliveryCard = ({ favorites, brands, favoriteFood }) => {
                         </div>
                       </div>
                       {favoriteFood && (
-                        <NavLink to={`/dineout/${entity_id}`}>
+                        <NavLink to={`${entity_id}`}>
                           <p className="text-xl font-[400] text-center text-black mt-2">
                             {name}
                           </p>
