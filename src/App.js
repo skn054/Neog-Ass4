@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 
 import "./App.css";
 import Header from "./Components/Header";
@@ -6,11 +6,10 @@ import Section from "./Components/Section";
 import DineOut from "./Components/DineOut";
 import NightLife from "./Components/NightLife";
 import Delivery from "./Components/Delivery";
-import { useContext } from "react";
-import { DeliveryContext } from "./Context/DeliveryContext";
 
 import Mockman from "mockman-js";
-import Dishes from "./Components/Dishes";
+import Shimmer from "./Components/Shimmer";
+
 /**
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad
  *
@@ -20,18 +19,30 @@ import Dishes from "./Components/Dishes";
  *
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/mehfil-narayanguda/order&location=&isMobile=0 - Top brands
  */
-function App() {
-  const history = console.log("App");
+function App(props) {
+  const { pathname } = useLocation();
+  const regex = /^\/restaurant\/\d+$/;
+  console.log("pathname", pathname);
+  console.log("useparams", useParams());
   return (
     <div className="App">
-      <Header />
-      <Section />
+      <Header></Header>
+      {["/login", "/signup"].includes(pathname) ||
+      regex.test(pathname) ? null : (
+        <>
+          <Section></Section>
+        </>
+      )}
+
       <Routes>
-        <Route path="/delivery" element={<Delivery />} />
         <Route path="/dineout" element={<DineOut />} />
         <Route path="/nightlife" element={<NightLife />} />
         <Route path="/test" element={<Mockman />} />
-        <Route path="/:dishId" element={<Dishes />} />
+        <Route path="/delivery/shimmer" element={<Shimmer />} />
+
+        {["/delivery", "/delivery/:dishId"].map((path) => (
+          <Route path={path} element={<Delivery />} />
+        ))}
       </Routes>
     </div>
   );

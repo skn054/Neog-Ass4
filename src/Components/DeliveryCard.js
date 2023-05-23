@@ -15,12 +15,16 @@ const DeliveryCard = ({ favorites, brands, favoriteFood }) => {
                   name,
                   actionInfo: { clickUrl },
                   entity_id,
+                  res_id,
                 } = item;
                 const img_url = brands
                   ? item?.image?.url
                   : item?.image?.imageUrl;
                 return (
-                  <section className="w-40 mr-9">
+                  <section
+                    className="w-40 mr-9"
+                    key={brands ? res_id : entity_id}
+                  >
                     <div className="w-36 flex justify-center items-center flex-col">
                       <div className="cursor-pointer flex justify-center items-center rounder-[50%] h-16 w-16 ">
                         <div className="h-full w-full rounded-[50%] overflow-hidden">
@@ -28,7 +32,7 @@ const DeliveryCard = ({ favorites, brands, favoriteFood }) => {
                         </div>
                       </div>
                       {favoriteFood && (
-                        <NavLink to={`${entity_id}`}>
+                        <NavLink to={`${name?.toLowerCase()}`}>
                           <p className="text-xl font-[400] text-center text-black mt-2">
                             {name}
                           </p>
