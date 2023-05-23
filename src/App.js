@@ -9,6 +9,7 @@ import Delivery from "./Components/Delivery";
 
 import Mockman from "mockman-js";
 import Shimmer from "./Components/Shimmer";
+import RestaurantDetails from "./Components/RestaurantDetails";
 
 /**
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad
@@ -39,7 +40,7 @@ function App(props) {
         <Route path="/nightlife" element={<NightLife />} />
         <Route path="/test" element={<Mockman />} />
         <Route path="/delivery/shimmer" element={<Shimmer />} />
-
+        <Route path="/restaurant/:rId" element={<RestaurantDetails />} />
         {["/delivery", "/delivery/:dishId"].map((path) => (
           <Route path={path} element={<Delivery />} />
         ))}
