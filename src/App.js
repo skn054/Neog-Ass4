@@ -10,6 +10,8 @@ import Delivery from "./Components/Delivery";
 import Mockman from "mockman-js";
 import Shimmer from "./Components/Shimmer";
 import RestaurantDetails from "./Components/RestaurantDetails";
+import { Login } from "./Components/Login/Login";
+import { Toaster } from "react-hot-toast";
 
 /**
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad
@@ -28,17 +30,24 @@ function App(props) {
   return (
     <div className="App">
       <Header></Header>
-      {["/login", "/signup"].includes(pathname) ||
+      {["/login", "/signup", "/cart"].includes(pathname) ||
       regex.test(pathname) ? null : (
         <>
           <Section></Section>
         </>
       )}
 
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        containerStyle={{ top: "10%" }}
+      />
+
       <Routes>
         <Route path="/dineout" element={<DineOut />} />
         <Route path="/nightlife" element={<NightLife />} />
         <Route path="/test" element={<Mockman />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/delivery/shimmer" element={<Shimmer />} />
         <Route path="/restaurant/:rId" element={<RestaurantDetails />} />
         {["/delivery", "/delivery/:dishId"].map((path) => (

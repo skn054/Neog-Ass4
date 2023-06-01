@@ -1,24 +1,38 @@
 import React, { useRef } from "react";
 import Input from "./Input";
 import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router";
+import { toast } from "react-hot-toast";
+import { CartContext } from "../Context/CartContext";
 // import { CartContext } from "../assests/cart-context";
 
 export default function Form(props) {
   //   const cartContext = useContext(CartContext);
+  const { token } = useContext(AuthContext);
+  const {
+    addToCart,
+    cartArray: { cart },
+    itemInCart,
+  } = useContext(CartContext);
   const inputRef = useRef();
-  //   function submitHandler(e) {
-  //     e.preventDefault();
-  //     const cartObj = {
-  //       ...props.data,
-  //       quantity: Number(inputRef.current.value),
-  //     };
+  const navigate = useNavigate();
+  function submitHandler(e) {
+    e.preventDefault();
 
-  //     cartContext.updateCartArray(cartObj);
-  //   }
+    if (token) {
+      itemInCart(props.data.item)
+        ? navigate("/cart")
+        : addToCart(props.data.item, token);
+    } else {
+      navigate("/login");
+      toast.error("Login to add items to cart");
+    }
+  }
 
   return (
-    <form className="input-form">
-      <Input
+    <form className="input-form" onSubmit={submitHandler}>
+      {/* <Input
         label="Amount"
         input={{
           type: "number",
@@ -28,8 +42,11 @@ export default function Form(props) {
           defaultValue: "1",
           ref: inputRef,
         }}
-      />
-      <button type="submit">+Add</button>
+      /> */}
+      <button type="submit">
+        {" "}
+        {itemInCart(props.data.item) ? "Go To Cart" : "+Add"}
+      </button>
     </form>
   );
 }

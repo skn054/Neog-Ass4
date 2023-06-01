@@ -1,4 +1,13 @@
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Tooltip } from "@mui/material";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { NavLink } from "react-router-dom";
 const Header = () => {
+  const { token, logOutHandler } = useContext(AuthContext);
   return (
     <header className="w-full max-w-full bg-transparent h-20 relative">
       <nav className="w-full max-w-max-c-h my-0 mx-auto flex justify-between items-center h-full">
@@ -35,14 +44,39 @@ const Header = () => {
 
         <div>
           <ul className="flex justify-between items-center gap-2  ">
-            <li className="bg-transparent cursor-pointer">
-              <a href="/to" className="text-xl p-3 text-gray-400">
-                Login
+            {!token ? (
+              <li className="bg-transparent cursor-pointer">
+                <NavLink to="/login" className="text-xl p-3 text-gray-400">
+                  <Tooltip title="Login">
+                    <LoginIcon />
+                  </Tooltip>
+                </NavLink>
+              </li>
+            ) : (
+              <li>
+                <NavLink
+                  className="text-xl p-3  text-gray-400"
+                  onClick={logOutHandler}
+                >
+                  <Tooltip title="Logout">
+                    <LogoutIcon />
+                  </Tooltip>
+                </NavLink>
+              </li>
+            )}
+
+            <li>
+              <a href="/to" className="text-xl p-3  text-gray-400">
+                <Tooltip title="Cart">
+                  <ShoppingCartIcon />
+                </Tooltip>
               </a>
             </li>
             <li>
               <a href="/to" className="text-xl p-3  text-gray-400">
-                Logout
+                <Tooltip title="Wishlist">
+                  <FavoriteIcon />
+                </Tooltip>
               </a>
             </li>
           </ul>

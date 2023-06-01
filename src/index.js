@@ -6,18 +6,23 @@ import App from "./App";
 import { makeServer } from "./server";
 import { DeliveryContextProvider } from "./Context/DeliveryContext";
 import { ProductContextProvider } from "./Context/ProductContext";
+import { AuthContextProvider } from "./Context/AuthContext";
+import { CartContextProvider } from "./Context/CartContext";
+
 // Call make Server
 makeServer();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <React.StrictMode>
   <Router>
-    <DeliveryContextProvider>
-      <ProductContextProvider>
-        <App />
-      </ProductContextProvider>
-    </DeliveryContextProvider>
+    <AuthContextProvider>
+      <CartContextProvider>
+        <DeliveryContextProvider>
+          <ProductContextProvider>
+            <App />
+          </ProductContextProvider>
+        </DeliveryContextProvider>
+      </CartContextProvider>
+    </AuthContextProvider>
   </Router>
-  // </React.StrictMode>
 );
