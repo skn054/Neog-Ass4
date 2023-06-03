@@ -202,8 +202,9 @@ export const products = [
                   name: "",
                   items: [
                     {
-                      item: {
+                      item: {   
                         id: "ctl_352820863",
+                        _id: "ctl_352820863",
                         name: "Mini Chicken Biryani",
                         price: 180,
                         desc: "",

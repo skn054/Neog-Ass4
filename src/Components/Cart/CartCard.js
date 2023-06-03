@@ -1,80 +1,62 @@
-import "./CartBookCard.css";
-import { useCart, useWishlist } from "../../index.js";
+import "./CartCard.css";
 import { NavLink } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useContext } from "react";
+import { CartContext } from "../../Context/CartContext";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-export const CartBookCard = ({ book, wishlistPage, cartPage }) => {
-  const { addToWishlist, isPresentInWishlist, deleteFromWishlist } =
-    useWishlist();
-  const { removeFromCart, updateQuantityInCart } = useCart();
+export const CartCard = ({ product, wishlistPage, cartPage }) => {
+  //   const { addToWishlist, isPresentInWishlist, deleteFromWishlist } =
+  //     useContext(CartContext);
+  const { removeFromCart, updateQuantityInCart } = useContext(CartContext);
 
-  const {
-    _id,
-    id,
-    title,
-    author,
-    description,
-    bookType,
-    inStock,
-    genres,
-    coverImg,
-    offers,
-    originalPrice,
-    qty,
-    discountPercent,
-    discountPrice,
-    totalRatings,
-    totalStars,
-    __v,
-    createdAt,
-    updatedAt,
-    wishlist,
-  } = book;
+  const { id, price, qty, item_image_url, name, rName } = product;
 
-  const removeFromCartBtnHandler = (e, book) => {
+  const removeFromCartBtnHandler = (e, product) => {
     e.preventDefault();
-    removeFromCart(book);
+    removeFromCart(product);
   };
 
-  const updateQuantityBtnHandler = (e, book, actionType) => {
+  const updateQuantityBtnHandler = (e, product, actionType) => {
     e.preventDefault();
-    updateQuantityInCart(book, actionType);
+    updateQuantityInCart(product, actionType);
   };
 
   return (
-    <NavLink to={`/bookDetails/${_id}`} className="cart_book_card_navlink">
-      <li key={_id} className="cart_book_card">
-        <img src={coverImg} alt={title} />
+    <div className="cart_book_card_navlink">
+      <li key={id} className="cart_book_card">
+        <img src={item_image_url} alt={name} />
         <div onClick={(e) => e.preventDefault()}>
-          {isPresentInWishlist(book) !== -1 ? (
+          {/* {isPresentInWishlist(product) !== -1 ? (
             <FavoriteIcon
               className="wishlist_icon"
-              onClick={() => deleteFromWishlist(book)}
+              onClick={() => deleteFromWishlist(product)}
             />
           ) : (
             <FavoriteBorderIcon
               className="wishlist_icon"
-              onClick={() => addToWishlist(book)}
+              onClick={() => addToWishlist(product)}
             />
-          )}
+          )} */}
         </div>
         <div className="cart_book_card_content">
-          <h3 className="cart_book_card_content_title">{title}</h3>
-          <p className="cart_book_card_content_author">{author}</p>
+          <h3 className="cart_book_card_content_title">{rName}</h3>
+          <p className="cart_book_card_content_author">{name}</p>
           <div className="cart_book_card_content_price_wrapper">
             <div className="cart_book_card_content_price">
-              <p>₹ {originalPrice}</p>
-              <h2>₹ {originalPrice - discountPrice}</h2>
+              {/* <p>₹ {price}</p> */}
+              <h2>₹ {price}</h2>
             </div>
           </div>
           <div className="cart_book_card_qty_remove">
             <div className="cart_book_card_qty_wrapper">
               <div className="cart_book_card_qty">
                 <button
+                  style={{ cursor: qty === 1 && "not-allowed" }}
                   disabled={qty === 1}
                   onClick={(e) =>
-                    updateQuantityBtnHandler(e, book, "decrement")
+                    updateQuantityBtnHandler(e, product, "decrement")
                   }
                 >
                   -
@@ -82,7 +64,7 @@ export const CartBookCard = ({ book, wishlistPage, cartPage }) => {
                 <p>{qty}</p>
                 <button
                   onClick={(e) =>
-                    updateQuantityBtnHandler(e, book, "increment")
+                    updateQuantityBtnHandler(e, product, "increment")
                   }
                 >
                   +
@@ -90,14 +72,14 @@ export const CartBookCard = ({ book, wishlistPage, cartPage }) => {
               </div>
             </div>
             <button
-              className="cart_book_card_button"
-              onClick={(e) => removeFromCartBtnHandler(e, book)}
+              className="cart_book_card_qty_remove_btn"
+              onClick={(e) => removeFromCartBtnHandler(e, product)}
             >
-              <p>Remove from Cart</p>
+              <DeleteIcon />
             </button>
           </div>
         </div>
       </li>{" "}
-    </NavLink>
+    </div>
   );
 };

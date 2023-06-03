@@ -2,21 +2,33 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
 import { Tooltip } from "@mui/material";
 import { useContext } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContext";
 import { NavLink } from "react-router-dom";
+import { CartContext } from "../../Context/CartContext";
+import { useRef } from "react";
+import { ProductContext } from "../../Context/ProductContext";
+
 const Header = () => {
   const { token, logOutHandler } = useContext(AuthContext);
+  const {
+    cartArray: { cart },
+  } = useContext(CartContext);
+  const { dispatch } = useContext(ProductContext);
+  const inputRef = useRef();
   return (
     <header className="w-full max-w-full bg-transparent h-20 relative">
       <nav className="w-full max-w-max-c-h my-0 mx-auto flex justify-between items-center h-full">
         <div>
-          <img
-            src="https://b.zmtcdn.com/web_assets/b40b97e677bc7b2ca77c58c61db266fe1603954218.png"
-            alt=""
-            className="w-32"
-          />
+          <NavLink to="/delivery">
+            <img
+              src="https://b.zmtcdn.com/web_assets/b40b97e677bc7b2ca77c58c61db266fe1603954218.png"
+              alt=""
+              className="w-32"
+            />
+          </NavLink>
         </div>
 
         <div className="bg-white shadow-lg flex w-3/6 h-12 justify-between items-center rounded-md">
@@ -39,6 +51,13 @@ const Header = () => {
           <input
             placeholder="Search for restaurant, cuisine or a dish"
             className="w-full text-lg border-none focus:outline-none"
+            ref={inputRef}
+            onChange={(e) =>
+              dispatch({
+                type: "SET_SEARCH_TEXT",
+                payload: inputRef.current.value,
+              })
+            }
           />
         </div>
 
@@ -66,18 +85,33 @@ const Header = () => {
             )}
 
             <li>
-              <a href="/to" className="text-xl p-3  text-gray-400">
+              <NavLink
+                to="/cart"
+                className="text-xl p-2 relative text-gray-400"
+              >
                 <Tooltip title="Cart">
                   <ShoppingCartIcon />
                 </Tooltip>
-              </a>
+                {token && cart?.length > 0 && (
+                  <p className="absolute top-0 right-0  text-xs ">
+                    {cart?.length}
+                  </p>
+                )}
+              </NavLink>
             </li>
             <li>
-              <a href="/to" className="text-xl p-3  text-gray-400">
+              <NavLink to="/wishlist" className="text-xl p-3  text-gray-400">
                 <Tooltip title="Wishlist">
                   <FavoriteIcon />
                 </Tooltip>
-              </a>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/profile" className="text-xl p-3  text-gray-400">
+                <Tooltip title="Profile">
+                  <PersonIcon />
+                </Tooltip>
+              </NavLink>
             </li>
           </ul>
         </div>

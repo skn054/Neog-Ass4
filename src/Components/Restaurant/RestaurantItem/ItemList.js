@@ -3,7 +3,7 @@ import React from "react";
 import Item from "./Item";
 import ItemCard from "./ItemCard";
 
-export default function ItemList({ menus }) {
+export default function ItemList({ menus, rName }) {
   const mealsList = menus.map(({ menu }) => {
     const { id, name, categories } = menu;
     // console.log("categories", categories);
@@ -15,6 +15,7 @@ export default function ItemList({ menus }) {
           <Item
             id={item.id}
             key={item.id}
+            rName={rName}
             name={item.name}
             description={item.desc}
             price={item.price}

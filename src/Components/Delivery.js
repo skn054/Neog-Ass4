@@ -4,12 +4,11 @@ import { useParams } from "react-router-dom";
 import DeliveryCard from "./DeliveryCard";
 
 import { ProductContext } from "../Context/ProductContext";
-import { Suspense, lazy } from "react";
 import Dishes from "./Dishes";
 const Delivery = () => {
   const { favorites, brands, isLoading } = useContext(DeliveryContext);
   const { dishId } = useParams();
-  const { products, isLoadingProduct, producterror, searchfilters } =
+  const { products, isLoadingProduct, searchfilters } =
     useContext(ProductContext);
 
   console.log("search filter", searchfilters, dishId);

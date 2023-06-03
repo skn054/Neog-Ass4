@@ -186,8 +186,8 @@ body {
 
 .card {
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  border-radius: 14px;
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); */
+  border-radius: 4px;
   background-color: white;
 }
 
@@ -228,14 +228,16 @@ body {
 }
 
 .input-form button {
-  color: white;
-  background-color: #8a2b06;
+  color: #60b246;
+  background-color: white;
   border: none;
   padding: 0.25rem 2rem;
-  border-radius: 14px;
+  border-radius: 4px;
   font: inherit;
   cursor: pointer;
   font-weight: bold;
+  box-shadow: 0 3px 8px #e9e9eb;
+  border: 1px solid #d4d5d9;
 }
 
 .input-form button:active {

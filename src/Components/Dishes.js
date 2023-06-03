@@ -1,6 +1,8 @@
-import RestaurantCard from "./RestaurantCard";
-import Restaurant from "./Restaurant";
-import { useReducer } from "react";
+import { useReducer, useContext } from "react";
+import RestaurantCard from "./Restaurant/RestaurantCard";
+import Restaurant from "./Restaurant/Restaurant";
+import { SearchContext } from "../Context/SearchContext";
+import { ProductContext } from "../Context/ProductContext";
 
 const reducerFun = (state, action) => {
   const { productsList, filtersFlag, uneditedProductsList } = state;
@@ -118,31 +120,54 @@ const reducerFun = (state, action) => {
         },
         uneditedProductsList: uneditedProductsList,
       };
+    case "FILTERED_PRODUCT":
+      return {
+        productsList: action.payload,
+        filtersFlag: { ...filtersFlag },
+        uneditedProductsList: uneditedProductsList,
+      };
     default:
       return { ...state };
   }
 };
 const Dishes = ({ dishId, products, isLoadingProduct }) => {
-  const [state, dispatch] = useReducer(reducerFun, {
-    productsList: products,
-    filtersFlag: {
-      relevance: true,
-      deliveryTime: false,
-      rating: false,
-      costHighToLow: false,
-      costLowToHigh: false,
-    },
-    uneditedProductsList: products,
-  });
+  console.log("products are", products);
+  // const [state, dispatch] = useReducer(reducerFun, {
+  //   productsList: products,
+  //   filtersFlag: {
+  //     relevance: true,
+  //     deliveryTime: false,
+  //     rating: false,
+  //     costHighToLow: false,
+  //     costLowToHigh: false,
+  //   },
+  //   uneditedProductsList: products,
+  // });
+  // const { searchText } = useContext(SearchContext);
+  const { dispatch, filtersFlag } = useContext(ProductContext);
 
-  const { productsList, filtersFlag } = state;
-  const { relevance, deliveryTime, rating, costHighToLow, costLowToHigh } =
-    filtersFlag;
+  // const { productsList, filtersFlag } = state;
+  const {
+    relevance,
+    deliveryTime,
+    rating,
+    costHighToLow,
+    costLowToHigh,
+    searchText,
+  } = filtersFlag;
+
+  if (searchText.length > 0) {
+    products = products.filter(({ info: { cuisine } }) =>
+      cuisine.find(({ name }) =>
+        name.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }
   if (isLoadingProduct) {
     return <h1>Loading...</h1>;
   }
 
-  console.log("product list is", productsList);
+  console.log("product list is", products);
   return (
     <>
       <div className="mt-10 py-8 bg-[#F8F8F8]">
@@ -218,10 +243,16 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
           <section className="w-full relative">
             <section>
               <section className="flex relative flex-wrap gap-5">
-                {productsList.map((item) => {
+                {/* {productsList.map((item) => { */}
+                {products.map((item) => {
                   return (
                     <RestaurantCard key={item._id} id={item._id}>
-                      <Restaurant key={item._id} {...item} />
+                      <Restaurant
+                        key={item._id}
+                        {...item}
+                        item={item}
+                        id={item._id}
+                      />
                     </RestaurantCard>
                   );
                 })}

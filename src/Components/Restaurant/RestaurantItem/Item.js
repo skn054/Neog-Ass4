@@ -1,5 +1,5 @@
 import React from "react";
-import Form from "./Form";
+import Form from "../../Form";
 
 export default function Item(props) {
   console.log("rating", Number(props.rating?.value));
@@ -7,7 +7,11 @@ export default function Item(props) {
     <div className="meal-item">
       <div className="flex  justify-center gap-3 h-32">
         <div className="h-full w-32">
-          <img src={props.image} alt={props.description} className="h-full w-full" />
+          <img
+            src={props.image}
+            alt={props.description}
+            className="h-full w-full"
+          />
         </div>
         <div className="flex flex-col gap-2 items-start h-full">
           <h3 className="name">{props.name}</h3>
@@ -15,16 +19,25 @@ export default function Item(props) {
             <div>
               {props.rating?.value && (
                 <>
-                  {[...Array(Math.floor(props.rating?.value))].map((star) => {
-                    return (
-                      <span style={{ color: "#fc0", background: "#fff" }}>
-                        &#9733;
-                      </span>
-                    );
-                  })}
+                  {[...Array(Math.floor(props.rating?.value))].map(
+                    (star, index) => {
+                      return (
+                        <span
+                          key={index}
+                          style={{ color: "#fc0", background: "#fff" }}
+                        >
+                          &#9733;
+                        </span>
+                      );
+                    }
+                  )}
                   {[...Array(5 - Math.floor(props.rating?.value))].map(
-                    (star) => {
-                      return <span className="star">&#9733;</span>;
+                    (star, index) => {
+                      return (
+                        <span key={index} className="star">
+                          &#9733;
+                        </span>
+                      );
                     }
                   )}
                 </>
@@ -39,7 +52,7 @@ export default function Item(props) {
         </div>
       </div>
       <div>
-        <Form data={props} />
+        <Form data={props} rName={props.rName} />
       </div>
     </div>
   );

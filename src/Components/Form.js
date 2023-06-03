@@ -23,7 +23,14 @@ export default function Form(props) {
     if (token) {
       itemInCart(props.data.item)
         ? navigate("/cart")
-        : addToCart(props.data.item, token);
+        : addToCart(
+            {
+              rName: props?.rName,
+              _id: props?.data?.item?.id,
+              ...props.data.item,
+            },
+            token
+          );
     } else {
       navigate("/login");
       toast.error("Login to add items to cart");
@@ -44,7 +51,6 @@ export default function Form(props) {
         }}
       /> */}
       <button type="submit">
-        {" "}
         {itemInCart(props.data.item) ? "Go To Cart" : "+Add"}
       </button>
     </form>

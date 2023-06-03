@@ -12,6 +12,27 @@ export function AuthContextProvider({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const signUpHandler = async (userDetails) => {
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(userDetails),
+      });
+      const { createdUser, encodedToken } = await response.json();
+      if (response.status === 201) {
+        localStorage.setItem(
+          "loginDetails",
+          JSON.stringify({ user: createdUser, token: encodedToken })
+        );
+        setToken(encodedToken);
+        toast.success("Successfully signed up! Kindly login to continue!");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to sign up!");
+    }
+  };
   const loginHandler = async ({ email, password }) => {
     try {
       const authCall = await fetch("/api/auth/login", {
@@ -20,18 +41,24 @@ export function AuthContextProvider({ children }) {
       });
 
       const { foundUser, encodedToken } = await authCall.json();
-      console.log(foundUser, encodedToken);
-      localStorage.setItem(
-        "loginDetails",
-        JSON.stringify({ user: foundUser, token: encodedToken })
-      );
-      setToken(encodedToken);
-      toast.success("Successfully signed in!");
-      console.log("location", location);
-      navigate(location?.state?.from?.pathname ?? "/delivery");
+      console.log("auth call", foundUser, encodedToken, authCall.status);
+
+      if (authCall.status === 200) {
+        console.log(foundUser, encodedToken);
+        localStorage.setItem(
+          "loginDetails",
+          JSON.stringify({ user: foundUser, token: encodedToken })
+        );
+        setToken(encodedToken);
+        toast.success("Successfully signed in!");
+        console.log("location", location);
+        navigate(location?.state?.from?.pathname ?? "/delivery");
+      } else if (authCall.status === 404) {
+        toast.error("Invalid user and password");
+      }
     } catch (error) {
       console.log(error);
-      toast.error(error);
+      toast.error("");
     }
   };
 
@@ -42,7 +69,9 @@ export function AuthContextProvider({ children }) {
     navigate(location?.state?.from?.pathname ?? "/");
   };
   return (
-    <AuthContext.Provider value={{ loginHandler, token, logOutHandler }}>
+    <AuthContext.Provider
+      value={{ loginHandler, token, logOutHandler, signUpHandler }}
+    >
       {children}
     </AuthContext.Provider>
   );

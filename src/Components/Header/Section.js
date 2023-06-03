@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { DeliveryContext } from "../Context/DeliveryContext";
+import { DeliveryContext } from "../../Context/DeliveryContext";
 
 const Section = () => {
   const { sectionSearchTabs, isLoading, error } = useContext(DeliveryContext);

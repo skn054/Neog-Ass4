@@ -17,6 +17,10 @@ function cartReducer(state, action) {
       return { cart: action.payload };
     case "DISPLAY_CART":
       return { cart: action.payload };
+    case "UPDATE_QUANTITY_IN_CART":
+      return { cart: action.payload };
+    case "REMOVE_FROM_CART":
+      return { cart: action.payload };
     default:
       return state;
   }
@@ -42,6 +46,7 @@ export function CartContextProvider({ children }) {
 
         const { cart } = await cartCall.json();
         dispatch({ type: "DISPLAY_CART", payload: cart });
+        console.log("cart", cart);
       } catch (error) {
         console.log(error);
         toast.error("Unable to display cart!");
@@ -50,8 +55,8 @@ export function CartContextProvider({ children }) {
         setIsLoadingCart(false);
       }
     };
-    getCartDetails();
-  }, []);
+    token && getCartDetails();
+  }, [token]);
 
   const addToCart = async (item, authToken) => {
     // console.log("item", item);
@@ -61,12 +66,14 @@ export function CartContextProvider({ children }) {
         headers: {
           authorization: authToken,
         },
+        // body: JSON.stringify({ product: { _id: item?.id, ...item } }),
         body: JSON.stringify({ product: item }),
       });
 
       const { cart } = await cartCall.json();
       dispatch({ type: "ADD_TO_CART", payload: cart });
       toast.success("Added to cart successfully!");
+      console.log(cart);
     } catch (error) {
       console.log(error);
       toast.error("Unable to add to cart!");
@@ -74,12 +81,67 @@ export function CartContextProvider({ children }) {
   };
 
   const itemInCart = (item) => {
+    console.log("item in cart");
     return cartArray?.cart?.find((product) => product.id === item.id);
   };
 
+  const updateQuantityInCart = async (product, actionType) => {
+    console.log("actionType", actionType);
+    console.log("url", `/api/user/cart/${product.id}`);
+    try {
+      const cartCall = await fetch(`/api/user/cart/${product.id}`, {
+        method: "POST",
+
+        headers: {
+          authorization: token,
+        },
+        body: JSON.stringify({ action: { type: actionType } }),
+      });
+
+      const { cart } = await cartCall.json();
+      dispatch({ type: "UPDATE_QUANTITY_IN_CART", payload: cart });
+      toast.success(
+        `${
+          actionType === "increment" ? "Increased" : "Decreased"
+        } quantity in cart`
+      );
+      console.log("cart after update is", cart);
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to add to cart!");
+    }
+  };
+
+  const removeFromCart = async (product) => {
+    try {
+      const response = await fetch(`/api/user/cart/${product?.id}`, {
+        method: "DELETE",
+        headers: { authorization: token },
+      });
+      const { cart } = await response.json();
+      dispatch({ type: "REMOVE_FROM_CART", payload: cart });
+      toast.success(`${product.name} Removed From Cart`);
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to remove Item from cart");
+    }
+  };
+  const totalPrice = cartArray?.cart?.reduce((price, item) => {
+    return price + item?.price * item?.qty;
+  }, 0);
+
   return (
     <CartContext.Provider
-      value={{ addToCart, cartArray, itemInCart, isLoadingCart, isErrorCart }}
+      value={{
+        addToCart,
+        cartArray,
+        itemInCart,
+        isLoadingCart,
+        isErrorCart,
+        totalPrice,
+        updateQuantityInCart,
+        removeFromCart,
+      }}
     >
       {children}
     </CartContext.Provider>
