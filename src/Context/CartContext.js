@@ -112,7 +112,7 @@ export function CartContextProvider({ children }) {
     }
   };
 
-  const removeFromCart = async (product) => {
+  const removeFromCart = async (product, checkoutPge) => {
     try {
       const response = await fetch(`/api/user/cart/${product?.id}`, {
         method: "DELETE",
@@ -120,7 +120,7 @@ export function CartContextProvider({ children }) {
       });
       const { cart } = await response.json();
       dispatch({ type: "REMOVE_FROM_CART", payload: cart });
-      toast.success(`${product.name} Removed From Cart`);
+      !checkoutPge && toast.success(`${product.name} Removed From Cart`);
     } catch (error) {
       console.log(error);
       toast.error("Unable to remove Item from cart");
@@ -129,6 +129,18 @@ export function CartContextProvider({ children }) {
   const totalPrice = cartArray?.cart?.reduce((price, item) => {
     return price + item?.price * item?.qty;
   }, 0);
+
+  const emptyCart = () => {
+    try {
+      for (let i = 0; i < cartArray?.cart?.length; i++) {
+        removeFromCart(cartArray?.cart[i], true);
+      }
+      toast.success("Emptied cart successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Unable to empty cart!");
+    }
+  };
 
   return (
     <CartContext.Provider
@@ -141,6 +153,7 @@ export function CartContextProvider({ children }) {
         totalPrice,
         updateQuantityInCart,
         removeFromCart,
+        emptyCart,
       }}
     >
       {children}

@@ -10,6 +10,7 @@ import { AuthContextProvider } from "./Context/AuthContext";
 import { CartContextProvider } from "./Context/CartContext";
 import { WishListContextProvider } from "./Context/WishListContext";
 import { SearchContextProvider } from "./Context/SearchContext";
+import { AddressContextProvider } from "./Context/AddressContext";
 
 // Call make Server
 makeServer();
@@ -21,13 +22,15 @@ root.render(
       {/* <CartContextProvider> */}
       <DeliveryContextProvider>
         <ProductContextProvider>
-          <WishListContextProvider>
-            <CartContextProvider>
-              <SearchContextProvider>
-                <App />
-              </SearchContextProvider>
-            </CartContextProvider>
-          </WishListContextProvider>
+          <AddressContextProvider>
+            <WishListContextProvider>
+              <CartContextProvider>
+                <SearchContextProvider>
+                  <App />
+                </SearchContextProvider>
+              </CartContextProvider>
+            </WishListContextProvider>
+          </AddressContextProvider>
         </ProductContextProvider>
       </DeliveryContextProvider>
       {/* </CartContextProvider> */}

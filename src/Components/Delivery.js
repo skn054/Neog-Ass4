@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DeliveryContext } from "../Context/DeliveryContext";
 import { useParams } from "react-router-dom";
 import DeliveryCard from "./DeliveryCard";
@@ -8,7 +8,7 @@ import Dishes from "./Dishes";
 const Delivery = () => {
   const { favorites, brands, isLoading } = useContext(DeliveryContext);
   const { dishId } = useParams();
-  const { products, isLoadingProduct, searchfilters } =
+  const { products, isLoadingProduct, searchfilters, dispatch } =
     useContext(ProductContext);
 
   console.log("search filter", searchfilters, dishId);
@@ -25,7 +25,7 @@ const Delivery = () => {
   };
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <h1>Loadingggg...</h1>;
   }
 
   console.log("Delivery");
@@ -44,7 +44,8 @@ const Delivery = () => {
       {dishId && (
         <Dishes
           dishId={dishId}
-          products={getProductAfterFilters(dishId)}
+          // products={getProductAfterFilters(dishId)}
+          products={products}
           isLoadingProduct={isLoadingProduct}
         />
       )}

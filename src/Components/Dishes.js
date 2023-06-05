@@ -1,8 +1,11 @@
-import { useReducer, useContext } from "react";
+import { useReducer, useContext, useState, useEffect } from "react";
 import RestaurantCard from "./Restaurant/RestaurantCard";
 import Restaurant from "./Restaurant/Restaurant";
 import { SearchContext } from "../Context/SearchContext";
 import { ProductContext } from "../Context/ProductContext";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { AddressModal } from "./Profile/AddressModal/AddressModal";
+import { FilterModal } from "./Filters/FilterModal";
 
 const reducerFun = (state, action) => {
   const { productsList, filtersFlag, uneditedProductsList } = state;
@@ -144,8 +147,10 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
   //   uneditedProductsList: products,
   // });
   // const { searchText } = useContext(SearchContext);
-  const { dispatch, filtersFlag } = useContext(ProductContext);
-
+  const { dispatch, filtersFlag, categoriesFilter, searchfilters } =
+    useContext(ProductContext);
+  const [showFilters, setShowFilters] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   // const { productsList, filtersFlag } = state;
   const {
     relevance,
@@ -156,15 +161,42 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
     searchText,
   } = filtersFlag;
 
+  useEffect(() => {
+    dispatch({
+      type: "SET_SEARCH_FILTERS",
+
+      payload: { ...categoriesFilter, [dishId]: true },
+    });
+
+    setIsLoading(false);
+
+    return function () {
+      dispatch({ type: "CLEAR_FILTERS" });
+      console.log("dishes component mounted out");
+    };
+  }, [dishId]);
+
+  if (isLoadingProduct || isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  // const getProductAfterFilters = (dishId) => {
+  //   return products.length > 0
+  //     ? products.filter(({ info: { cuisine } }) =>
+  //         cuisine.find(({ name }) =>
+  //           // name?.toLowerCase()?.includes(dishId?.toLowerCase())
+  //           searchfilters[dishId].join(",").includes(name.toLowerCase())
+  //         )
+  //       )
+  //     : [];
+  // };
+
   if (searchText.length > 0) {
     products = products.filter(({ info: { cuisine } }) =>
       cuisine.find(({ name }) =>
         name.toLowerCase().includes(searchText.toLowerCase())
       )
     );
-  }
-  if (isLoadingProduct) {
-    return <h1>Loading...</h1>;
   }
 
   console.log("product list is", products);
@@ -178,6 +210,7 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
                 <div className="text-2xl font-normal">
                   {products?.length} restaurants
                 </div>
+
                 <div className="flex items-center gap-4 text-[#686b78]">
                   <div className="cursor-pointer ">
                     Relevance
@@ -221,6 +254,12 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
                       <hr className="bg-[#686b78] h-[0.1rem] w-full"></hr>
                     )}
                   </div>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setShowFilters(true)}
+                  >
+                    Filters: <FilterAltIcon />
+                  </div>
                 </div>
               </div>
             </div>
@@ -230,16 +269,16 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
               <div className="max-w-max-c-h my-0 mx-auto flex justify-end">
                 <div
                   className="text-[#686b78] cursor-pointer hover:underline"
-                  onClick={() => dispatch({ type: "CLEAR_ALL" })}
+                  onClick={() => dispatch({ type: "CLEAR_FILTERS" })}
                 >
                   Clear All
                 </div>
               </div>
             </div>
           </div>
-          <h3 className="text-[#1C1C1C] text-2xl font-medium mb-8 text-start ">
+          {/* <h3 className="text-[#1C1C1C] text-2xl font-medium mb-8 text-start ">
             {dishId?.charAt(0)?.toUpperCase() + dishId?.slice(1)}
-          </h3>
+          </h3> */}
           <section className="w-full relative">
             <section>
               <section className="flex relative flex-wrap gap-5">
@@ -259,6 +298,11 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
               </section>
             </section>
           </section>
+          {showFilters && (
+            <div className="flex items-center justify-center fixed z-50 inset-0 bg-[#00000080]">
+              {showFilters && <FilterModal setShowFilters={setShowFilters} />}
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -8,6 +8,7 @@ const reducerFun = (state, action) => {
     case "RATING":
       console.log("executing rating");
       return {
+        ...state,
         productsList: [...productsList].sort((product1, product2) => {
           const {
             info: {
@@ -23,12 +24,21 @@ const reducerFun = (state, action) => {
 
           return Number(rating2) - Number(rating1);
         }),
-        filtersFlag: { ...filtersFlag, rating: true, relevance: false },
-        uneditedProductsList: uneditedProductsList,
+        // filtersFlag: { ...filtersFlag, rating: true, relevance: false },
+        filtersFlag: {
+          ...filtersFlag,
+          relevance: false,
+          deliveryTime: false,
+          rating: true,
+          costHighToLow: false,
+          costLowToHigh: false,
+        },
+        // uneditedProductsList: uneditedProductsList,
       };
 
     case "DELIVERY":
       return {
+        ...state,
         productsList: [...productsList].sort((product1, product2) => {
           const {
             order: { deliveryTime: delivery1 },
@@ -41,12 +51,21 @@ const reducerFun = (state, action) => {
             Number(delivery1.split("")[0]) - Number(delivery2.split("")[0])
           );
         }),
-        filtersFlag: { ...filtersFlag, relevance: false, deliveryTime: true },
-        uneditedProductsList: uneditedProductsList,
+        // filtersFlag: { ...filtersFlag, relevance: false, deliveryTime: true },
+        filtersFlag: {
+          ...filtersFlag,
+          relevance: false,
+          deliveryTime: true,
+          rating: false,
+          costHighToLow: false,
+          costLowToHigh: false,
+        },
+        // uneditedProductsList: uneditedProductsList,
       };
     case "COST_LOW_TO_HIGH":
       console.log("cost rating");
       return {
+        ...state,
         productsList: [...productsList].sort((product1, product2) => {
           const {
             info: {
@@ -70,14 +89,17 @@ const reducerFun = (state, action) => {
         filtersFlag: {
           ...filtersFlag,
           relevance: false,
+          deliveryTime: false,
+          rating: false,
           costHighToLow: false,
           costLowToHigh: true,
         },
-        uneditedProductsList: uneditedProductsList,
+        // uneditedProductsList: uneditedProductsList,
       };
     case "COST_HIGH_TO_LOW":
       console.log("cost rating");
       return {
+        ...state,
         productsList: [...productsList].sort((product1, product2) => {
           const {
             info: {
@@ -101,37 +123,74 @@ const reducerFun = (state, action) => {
         filtersFlag: {
           ...filtersFlag,
           relevance: false,
+          deliveryTime: false,
+          rating: false,
           costHighToLow: true,
           costLowToHigh: false,
         },
-        uneditedProductsList: uneditedProductsList,
+        // uneditedProductsList: uneditedProductsList,
       };
     case "CLEAR_ALL":
       return {
+        ...state,
         productsList: uneditedProductsList,
         filtersFlag: {
-          ...filtersFlag,
+          // ...filtersFlag,
           relevance: true,
           deliveryTime: false,
           rating: false,
           costHighToLow: false,
           costLowToHigh: false,
+          searchText: "",
         },
-        uneditedProductsList: uneditedProductsList,
+        // uneditedProductsList: uneditedProductsList,
       };
     case "SET_PRODUCTS":
       return {
+        ...state,
         productsList: action.payload,
-        filtersFlag: { ...filtersFlag },
+        // filtersFlag: { ...filtersFlag },
         uneditedProductsList: action.payload,
       };
 
     case "SET_SEARCH_TEXT":
       // console.log(action.payload);
       return {
-        productsList: [...productsList],
+        ...state,
+        // productsList: [...productsList],
         filtersFlag: { ...filtersFlag, searchText: action.payload },
-        uneditedProductsList: uneditedProductsList,
+        // uneditedProductsList: uneditedProductsList,
+      };
+    case "SET_SEARCH_FILTERS":
+      console.log("payload", action.payload);
+      return {
+        ...state,
+        categoriesFilter: action.payload,
+      };
+    case "CLEAR_FILTERS":
+      return {
+        ...state,
+        productsList: uneditedProductsList,
+        filtersFlag: {
+          relevance: true,
+          deliveryTime: false,
+          rating: false,
+          costHighToLow: false,
+          costLowToHigh: false,
+          searchText: "",
+        },
+        categoriesFilter: {
+          biryani: false,
+          pizza: false,
+          chicken: false,
+          burger: false,
+          shawarma: false,
+          cakes: false,
+          sandwitch: false,
+          dosa: false,
+          rolls: false,
+          thali: false,
+        },
       };
     default:
       return { ...state };
@@ -167,6 +226,19 @@ export function ProductContextProvider({ children }) {
     shawarma: ["shawarma"],
   });
 
+  const [categories, setCategories] = useState([
+    "biryani",
+    "pizza",
+    "chicken",
+    "burger",
+    "shawarma",
+    "cakes",
+    "sandwitch",
+    "dosa",
+    "rolls",
+    "thali",
+  ]);
+
   const [state, dispatch] = useReducer(reducerFun, {
     productsList: [],
     filtersFlag: {
@@ -176,6 +248,18 @@ export function ProductContextProvider({ children }) {
       costHighToLow: false,
       costLowToHigh: false,
       searchText: "",
+    },
+    categoriesFilter: {
+      biryani: false,
+      pizza: false,
+      chicken: false,
+      burger: false,
+      shawarma: false,
+      cakes: false,
+      sandwitch: false,
+      dosa: false,
+      rolls: false,
+      thali: false,
     },
 
     uneditedProductsList: [],
@@ -230,11 +314,53 @@ export function ProductContextProvider({ children }) {
     }
   };
 
+  const anyFiterApplied = () => {
+    return Object.values(state.categoriesFilter).find(
+      (value) => value === true
+    );
+  };
+  const getProductAfterFilters = (dishId) => {
+    return state.productsList.length > 0
+      ? state.productsList.filter(({ info: { cuisine } }) =>
+          cuisine.find(({ name }) =>
+            // name?.toLowerCase()?.includes(dishId?.toLowerCase())
+            searchfilters[dishId].join(",").includes(name.toLowerCase())
+          )
+        )
+      : [];
+  };
+
+  function getProductsAfterFIlter() {
+    let result = [];
+    Object.entries(state.categoriesFilter).forEach(([key, value]) => {
+      if (value === true) {
+        for (let product of getProductAfterFilters(key)) {
+          if (!result.find((resProduct) => resProduct._id === product._id)) {
+            result.push(product);
+          }
+          console.log(product);
+        }
+        // console.log(getProductAfterFilters(key));
+        // result = [...result, ...getProductAfterFilters(key)];
+      }
+    });
+
+    return result;
+  }
+
+  const finalProductList = anyFiterApplied(state.categoriesFilter)
+    ? getProductsAfterFIlter()
+    : state.productsList;
+
+  console.log(finalProductList);
+  // console.log(result)
   return (
     <ProductContext.Provider
       value={{
-        products: state.productsList,
+        // products: state.productsList,
+        products: finalProductList,
         filtersFlag: state.filtersFlag,
+        categoriesFilter: state.categoriesFilter,
         isLoadingProduct,
         producterror,
         searchfilters,
@@ -245,6 +371,7 @@ export function ProductContextProvider({ children }) {
         geProductWIthId,
         dispatch,
         setSearchText,
+        categories,
       }}
     >
       {children}

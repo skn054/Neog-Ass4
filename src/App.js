@@ -16,6 +16,10 @@ import { Cart } from "./Components/Cart/Cart";
 import RequireAuth from "./Components/RequireAuth";
 import WishList from "./Components/WIshList/WishList";
 import SignUp from "./Components/SignUp/SignUp";
+import Profile from "./Components/Profile/Profile";
+import ProfileHome from "./Components/Profile/ProfileHome/ProfileHome";
+import ProfileAddress from "./Components/Profile/ProfileAddress/ProfileAddress";
+import { CheckOut } from "./Components/CheckOut/CheckOut";
 
 /**
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad
@@ -34,8 +38,16 @@ function App(props) {
   return (
     <div className="App">
       <Header></Header>
-      {["/login", "/signup", "/cart", "/wishlist"].includes(pathname) ||
-      regex.test(pathname) ? null : (
+      {[
+        "/login",
+        "/signup",
+        "/cart",
+        "/wishlist",
+        "/profile",
+        "/profile/",
+        "/profile/address",
+        "/checkout",
+      ].includes(pathname) || regex.test(pathname) ? null : (
         <>
           <Section></Section>
         </>
@@ -53,6 +65,18 @@ function App(props) {
         <Route path="/test" element={<Mockman />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/checkout" element={<CheckOut />} />
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          }
+        >
+          <Route path="" element={<ProfileHome />} />
+          <Route path="address" element={<ProfileAddress />} />
+        </Route>
         <Route
           path="/cart"
           element={

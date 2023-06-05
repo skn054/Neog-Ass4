@@ -65,9 +65,9 @@ export const Cart = () => {
                     {totalPrice}
                   </h2>
                 </div>
-                <button>
+                <NavLink to="/checkout">
                   <h2>Checkout</h2>
-                </button>
+                </NavLink>
               </div>
             </div>
           </div>
