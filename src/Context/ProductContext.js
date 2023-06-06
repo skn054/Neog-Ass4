@@ -185,8 +185,8 @@ const reducerFun = (state, action) => {
           chicken: false,
           burger: false,
           shawarma: false,
-          cakes: false,
-          sandwitch: false,
+          cake: false,
+          sandwich: false,
           dosa: false,
           rolls: false,
           thali: false,
@@ -232,8 +232,8 @@ export function ProductContextProvider({ children }) {
     "chicken",
     "burger",
     "shawarma",
-    "cakes",
-    "sandwitch",
+    "cake",
+    "sandwich",
     "dosa",
     "rolls",
     "thali",
@@ -255,8 +255,8 @@ export function ProductContextProvider({ children }) {
       chicken: false,
       burger: false,
       shawarma: false,
-      cakes: false,
-      sandwitch: false,
+      cake: false,
+      sandwich: false,
       dosa: false,
       rolls: false,
       thali: false,
@@ -324,7 +324,7 @@ export function ProductContextProvider({ children }) {
       ? state.productsList.filter(({ info: { cuisine } }) =>
           cuisine.find(({ name }) =>
             // name?.toLowerCase()?.includes(dishId?.toLowerCase())
-            searchfilters[dishId].join(",").includes(name.toLowerCase())
+            searchfilters[dishId]?.join(",").includes(name?.toLowerCase())
           )
         )
       : [];

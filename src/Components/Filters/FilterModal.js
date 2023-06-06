@@ -30,7 +30,7 @@ export const FilterModal = ({ setShowFilters }) => {
   // const [fakeValues, setFakeValues] = useState(false);
 
   //   console.log("initial values", initialValues);
-  console.log(categoriesFilter);
+  // console.log(categoriesFilter);
   const { handleChange, handleSubmit, values, errors, touched } = useFormik({
     // initialValues: {
     //   name: "",
@@ -49,18 +49,18 @@ export const FilterModal = ({ setShowFilters }) => {
     },
   });
 
-  console.log("filter values", values);
+  // console.log("filter values", values);
 
   return (
     <div className="addressModal">
       <h2>Categories</h2>
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-wrap gap-1 overflow-y-scroll items-center justify-center ">
-          {categories.map((category) => {
+        <div className="flex gap-1 overflow-y-scroll flex-wrap">
+          {categories.map((category, index) => {
             return (
-              <label>
-                <div className="flex items-center justify-center">
-                  <div className="flex-1">
+              <label key={index}>
+                <div className="flex">
+                  <div className="flex-1 items-center justify-center">
                     <input
                       type="checkbox"
                       name={category}
@@ -70,7 +70,7 @@ export const FilterModal = ({ setShowFilters }) => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 items-center justify-center">
                     {category?.charAt(0)?.toUpperCase() + category?.slice(1)}
                   </div>
                 </div>
