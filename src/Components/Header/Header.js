@@ -23,6 +23,7 @@ const Header = () => {
       <nav className="w-full max-w-max-c-h my-0 mx-auto flex justify-between items-center h-full">
         <div>
           <NavLink to="/delivery">
+            {/* <NavLink to="/"> */}
             <img
               src="https://b.zmtcdn.com/web_assets/b40b97e677bc7b2ca77c58c61db266fe1603954218.png"
               alt=""
