@@ -20,8 +20,8 @@ const WishList = () => {
           ) : isErrorWishList ? (
             <h1>Error</h1>
           ) : wishList.length === 0 ? (
-            <div>
-              <h2>Oops! Your WishList is empty! </h2>
+            <div className="flex items-center justify-center">
+              <h2 className="text-center">Oops! Your WishList is empty! </h2>
               <NavLink to="/delivery">
                 <button>Start shopping!</button>
               </NavLink>

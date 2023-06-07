@@ -41,7 +41,7 @@ export const CartCard = ({ product, wishlistPage, cartPage }) => {
           )} */}
         </div>
         <div className="cart_book_card_content">
-          <h3 className="cart_book_card_content_title">{rName}</h3>
+          <h3 className="cart_book_card_content_title text-xl ">{rName}</h3>
           <p className="cart_book_card_content_author">{name}</p>
           <div className="cart_book_card_content_price_wrapper">
             <div className="cart_book_card_content_price">
@@ -50,7 +50,7 @@ export const CartCard = ({ product, wishlistPage, cartPage }) => {
             </div>
           </div>
           <div className="cart_book_card_qty_remove">
-            <div className="cart_book_card_qty_wrapper">
+            <div className="cart_book_card_qty_wrapper mb-[1px]">
               <div className="cart_book_card_qty">
                 <button
                   style={{ cursor: qty === 1 && "not-allowed" }}
@@ -72,7 +72,7 @@ export const CartCard = ({ product, wishlistPage, cartPage }) => {
               </div>
             </div>
             <button
-              className="cart_book_card_qty_remove_btn"
+              className="cart_book_card_qty_remove_btn w-[50%] flex items-center bg-slate-200"
               onClick={(e) => removeFromCartBtnHandler(e, product)}
             >
               <DeleteIcon />
