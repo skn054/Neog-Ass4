@@ -47,6 +47,7 @@ function App(props) {
         "/profile/",
         "/profile/address",
         "/checkout",
+        "/:dishId",
       ].includes(pathname) || regex.test(pathname) ? null : (
         <>
           <Section></Section>
@@ -95,13 +96,13 @@ function App(props) {
         />
         <Route path="/delivery/shimmer" element={<Shimmer />} />
         <Route path="/restaurant/:rId" element={<RestaurantDetails />} />
-        {["/delivery", "/delivery/:dishId"].map((path, index) => (
+        {/* {["/delivery", "/delivery/:dishId"].map((path, index) => (
           <Route key={index} path={path} element={<Delivery />} />
-        ))}
-        {/* <Route path="/" element={<Delivery />}>
+        ))} */}
+        <Route path="/" element={<Delivery />}>
           <Route path="/:dishId" element={<Delivery />} />
-          <Route path="address" element={<ProfileAddress />} />
-        </Route> */}
+          {/* <Route path="address" element={<ProfileAddress />} /> */}
+        </Route>
       </Routes>
     </div>
   );
