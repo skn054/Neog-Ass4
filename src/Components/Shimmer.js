@@ -1,10 +1,18 @@
-const CardShimmer = () => {
+export const CardShimmer = () => {
   return (
     <div className="shimmer-card">
       <div className="shimmer-img stroke animate"></div>
       <div className="shimmer-title stroke animate"></div>
       <div className="shimmer-tags stroke animate "></div>
       <div className="shimmer-details stroke animate "></div>
+    </div>
+  );
+};
+
+export const CardCircularShimmer = () => {
+  return (
+    <div className="shimmer-circle">
+      <div className="shimmer-circle-img stroke animate"></div>
     </div>
   );
 };
@@ -84,7 +92,7 @@ export const MenuShimmer = () => {
   );
 };
 
-const Shimmer = () => {
+export const Shimmer = () => {
   return (
     <div className="shimmer-container">
       {/* create a new Array instance using Array() constructor and map through every element of array */}
@@ -92,6 +100,19 @@ const Shimmer = () => {
         .fill("")
         .map((element, index) => {
           return <CardShimmer key={index} />;
+        })}
+    </div>
+  );
+};
+
+export const CardCircleShimmer = () => {
+  return (
+    <div className="shimmer-container">
+      {/* create a new Array instance using Array() constructor and map through every element of array */}
+      {Array(4)
+        .fill("")
+        .map((element, index) => {
+          return <CardCircularShimmer key={index} />;
         })}
     </div>
   );

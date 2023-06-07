@@ -3,6 +3,7 @@ import { ProductContext } from "../../Context/ProductContext";
 import RestaurantHeader from "./RestaurantHeader";
 import ItemList from "./RestaurantItem/ItemList";
 import { useParams } from "react-router";
+import { Shimmer } from "../Shimmer";
 
 const RestaurantDetails = () => {
   // const [error, setError] = useState({});
@@ -35,7 +36,7 @@ const RestaurantDetails = () => {
     <div className="w-full max-w-full bg-transparent my-5">
       <section className="w-full max-w-max-c-h my-0 mx-auto relative">
         {isLoadingMenu ? (
-          <h1>Loading...</h1>
+          <Shimmer />
         ) : errorMenu.status ? (
           <>
             <p>

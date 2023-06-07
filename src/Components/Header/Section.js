@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { DeliveryContext } from "../../Context/DeliveryContext";
-
+import { Shimmer } from "../Shimmer";
 const Section = () => {
   const { sectionSearchTabs, isLoading, error } = useContext(DeliveryContext);
   let result;
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <Shimmer />;
   } else if (error?.status) {
     return (
       <h1>
@@ -19,8 +19,8 @@ const Section = () => {
     result = sectionSearchTabs.map((item) => {
       const { key, image, title } = item;
       return (
-        <NavLink to={key === "delivery" ? "/" : `/${key}`} key={key}></NavLink>
-        // <NavLink to={`/${key}`} key={key}>
+        // <NavLink to={key === "delivery" ? "/" : `/${key}`} key={key}>
+        <NavLink to={`/${key}`} key={key}>
           {({ isActive }) => (
             <div className="flex justify-center items-center flex-col ">
               <div className="flex items-center">

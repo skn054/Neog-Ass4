@@ -20,6 +20,7 @@ import Profile from "./Components/Profile/Profile";
 import ProfileHome from "./Components/Profile/ProfileHome/ProfileHome";
 import ProfileAddress from "./Components/Profile/ProfileAddress/ProfileAddress";
 import { CheckOut } from "./Components/CheckOut/CheckOut";
+import Home from "./Components/Home/Home";
 
 /**
  * https://www.zomato.com/webroutes/getPage?page_url=/hyderabad/secunderabad-restaurants?place_name=Secunderabad
@@ -47,7 +48,6 @@ function App(props) {
         "/profile/",
         "/profile/address",
         "/checkout",
-        "/:dishId",
       ].includes(pathname) || regex.test(pathname) ? null : (
         <>
           <Section></Section>
@@ -94,15 +94,16 @@ function App(props) {
             </RequireAuth>
           }
         />
+        <Route path="/" element={<Home />} />
         <Route path="/delivery/shimmer" element={<Shimmer />} />
         <Route path="/restaurant/:rId" element={<RestaurantDetails />} />
-        {/* {["/delivery", "/delivery/:dishId"].map((path, index) => (
+        {["/delivery", "/delivery/:dishId"].map((path, index) => (
           <Route key={index} path={path} element={<Delivery />} />
-        ))} */}
-        <Route path="/" element={<Delivery />}>
+        ))}
+        {/* <Route path="/" element={<Delivery />}>
           <Route path="/:dishId" element={<Delivery />} />
-          {/* <Route path="address" element={<ProfileAddress />} /> */}
-        </Route>
+          <Route path="address" element={<ProfileAddress />} />
+        </Route> */}
       </Routes>
     </div>
   );

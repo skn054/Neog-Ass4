@@ -38,6 +38,23 @@ body {
   margin-bottom: 10px;
   border-color: #d3d5df;
   box-shadow: 0 4px 7px 0 rgb(218 220 230 / 60%);
+  /* border-radius: 50%; */
+}
+
+.shimmer-circle {
+  flex-basis: 250px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-color: #d3d5df;
+  box-shadow: 0 4px 7px 0 rgb(218 220 230 / 60%);
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.shimmer-circle-img {
+  height: 50px;
+  width: 50px;
 }
 .shimmer-title {
   width: 60%;

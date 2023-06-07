@@ -5,6 +5,7 @@ import DeliveryCard from "./DeliveryCard";
 
 import { ProductContext } from "../Context/ProductContext";
 import Dishes from "./Dishes";
+import { Shimmer } from "./Shimmer";
 const Delivery = () => {
   const { favorites, brands, isLoading } = useContext(DeliveryContext);
   const { dishId } = useParams();
@@ -25,7 +26,7 @@ const Delivery = () => {
   };
 
   if (isLoading) {
-    return <h1>Loadingggg...</h1>;
+    return <Shimmer />;
   }
 
   console.log("Delivery");
@@ -33,7 +34,7 @@ const Delivery = () => {
     <>
       {!dishId &&
         (isLoading ? (
-          <h1>Loading...</h1>
+          <Shimmer />
         ) : (
           <>
             <DeliveryCard favorites={favorites} favoriteFood />

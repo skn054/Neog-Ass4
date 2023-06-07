@@ -6,7 +6,7 @@ import { ProductContext } from "../Context/ProductContext";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { AddressModal } from "./Profile/AddressModal/AddressModal";
 import { FilterModal } from "./Filters/FilterModal";
-
+import { Shimmer } from "./Shimmer";
 const reducerFun = (state, action) => {
   const { productsList, filtersFlag, uneditedProductsList } = state;
   switch (action.type) {
@@ -177,7 +177,7 @@ const Dishes = ({ dishId, products, isLoadingProduct }) => {
   }, [dishId]);
 
   if (isLoadingProduct || isLoading) {
-    return <h1>Loading...</h1>;
+    return <Shimmer />;
   }
 
   // const getProductAfterFilters = (dishId) => {
